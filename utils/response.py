@@ -2,6 +2,7 @@ from enum import IntEnum
 from http import HTTPStatus
 from itertools import chain
 from typing import Any, Dict, Optional, Union
+from urllib import response
 
 
 class _StatusConstructor(IntEnum):
@@ -40,7 +41,10 @@ class ResultStatus(_StatusConstructor):
 # Can't support typing.Union[Status, int]
 UnionStatus = _StatusConstructor(
     "UnionStatus",
-    [(i.name, (i.value, i.phrase, i.description)) for i in chain(HTTPStatus, ResultStatus)],
+    [
+        (i.name, (i.value, i.phrase, i.description))
+        for i in chain(HTTPStatus, ResultStatus)
+    ],
 )
 
 
@@ -55,7 +59,9 @@ class _BaseResponse(dict):
     def __new__(cls, *args: Any, **kwargs: Any):
         is_valid_kwargs = set(kwargs.keys()).issubset(cls.__slots__)
         if not is_valid_kwargs:
-            raise KeyError(f"{cls} only accept kwargs: {cls.__slots__}. Got: {args}, {kwargs}")
+            raise KeyError(
+                f"{cls} only accept kwargs: {cls.__slots__}. Got: {args}, {kwargs}"
+            )
         return super().__new__(cls, *args, **kwargs)
 
     def __init__(
@@ -72,7 +78,9 @@ class _BaseResponse(dict):
 
     def __setitem__(self, key: str, val: Any):
         if not self.__slots__.__contains__(key):
-            raise KeyError(f"'{self.__class__.__name__}' object has not allowed attribute '{key}'")
+            raise KeyError(
+                f"'{self.__class__.__name__}' object has not allowed attribute '{key}'"
+            )
         super().__setitem__(key, val)
 
     def __eq__(self, __value: object) -> bool:
@@ -116,8 +124,12 @@ class Response(_BaseResponse):
         msg: Optional[Union[str, BaseException]] = None,
         data: Optional[Any] = None,
     ):
+        if data is None:
+            data = {}
         if not isinstance(data, (dict, list)):
-            raise TypeError(f"{self.__class__} data must be dict or list. Got: {type(data)}")
+            raise TypeError(
+                f"{self.__class__} data must be dict or list. Got: {type(data)}"
+            )
         return super().check_kwargs(code, msg, data)
 
 
@@ -147,3 +159,6 @@ if __name__ == "__main__":
     # result = Result(code=100, msg='Hello', data={'a': 1, 'b': 2})
     result["data"] = {"c": 1, "d": 2}
     print(result)
+
+    response = Response(200)
+    print(response)
