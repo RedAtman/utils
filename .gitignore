@@ -124,7 +124,25 @@ venv.bak/
 *.db
 *.sqlite
 *.sqlite3
+*.sql
 
 # Tmp
 tmp/
 __*/
+
+# Data
+*.csv
+*.json
+*.xls
+*.xlsx
+*.pkl
+*.pickle
+
+# Logs
+*.log
+*.log.*
+*.log.*.*
+*.log-*.*
+*.log_*.*
+*.log-*.*.*
+*.log_*.*.*
