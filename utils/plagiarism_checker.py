@@ -26,7 +26,7 @@ def check_plagiarism(vectors, filenames):
 
 def check_files(files):
     """Read the files and check for plagiarism"""
-    student_notes = [open(file, encoding='latin-1').read() for file in files]
+    student_notes = [open(file, encoding="latin-1").read() for file in files]
     vectors = vectorize(student_notes)
     plagiarism_results = check_plagiarism(vectors, files)
     results = filter(lambda x: x[0] > 0.9, plagiarism_results)
@@ -37,8 +37,8 @@ if __name__ == "__main__":
     import os
     from pathlib import Path
 
-    DATA_DIR = Path('/Users/nut/Dropbox/backup/obsidian/dev')
-    files = sorted(filter(lambda x: x.endswith('.md'), os.listdir(DATA_DIR)))
+    DATA_DIR = Path("~/Dropbox/backup/obsidian/dev")
+    files = sorted(filter(lambda x: x.endswith(".md"), os.listdir(DATA_DIR)))
     absolute_files = [DATA_DIR / file for file in files]
     result = check_files(absolute_files)
     print(result)
